@@ -5,77 +5,22 @@ from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 from streamlit_option_menu import option_menu
 import base64
+import zipfile
+import os
 
+zip_path = 'data.zip'
+extracted_dir = 'extracted_file/'
 
-def load_and_preprocess_data():
-    
-    df = pd.read_csv('C:/Users/dell/OneDrive/Bureau/git/Recommendation-System-Proj/ratings_Electronics.csv')
-    df.columns = ['user_id', 'prod_id', 'rating', 'timestamp']  # Adding column names
-    df = df.drop('timestamp', axis=1)  # Dropping timestamp
+# Unzip the file
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    zip_ref.extractall(extracted_dir)
 
-    # Count the occurrences of each value in the 'prod_id' column
-    value_counts = df['prod_id'].value_counts()
-    
-    # Get the values that occur more than 50 times
-    popular_prods = value_counts[value_counts > 50].index
-    
-    # Filter the DataFrame to keep only rows with popular product IDs
-    df_filtered = df[df['prod_id'].isin(popular_prods)]
-    
-    # Count the occurrences of each value in the 'user_id' column
-    value_counts = df_filtered['user_id'].value_counts()
-    
-    # Get the values that occur more than 50 times
-    active_users = value_counts[value_counts > 50].index
-    
-    # Filter the DataFrame to keep only rows with active user IDs
-    df_final = df_filtered[df_filtered['user_id'].isin(active_users)]
+# Read the CSV file from the extracted directory
+matrix_filled_path = os.path.join(extracted_dir, 'matrix_filled.csv')
+matrix_w_NANs_path = os.path.join(extracted_dir, 'matrix_w_NANs.csv')
 
-    return df_final
-    
-df_final = load_and_preprocess_data()
-
-def save_retained_users_and_products_list():
-    retained_users = df_final['user_id'].unique()
-    retained_products = df_final['prod_id'].unique()
-
-    # Calculate the number of ratings given by each user
-    user_rating_counts = df_final['user_id'].value_counts()
-
-    # Sort retained_users by descending number of ratings given by each user
-    sorted_retained_users = sorted(retained_users, key=lambda user: -user_rating_counts.get(user, 0))
-
-    # Calculate the number of ratings received by each product
-    product_rating_counts = df_final['prod_id'].value_counts()
-
-    # Sort retained_products by descending number of ratings ved by each product
-    sorted_retained_products = sorted(retained_products, key=lambda product: -product_rating_counts.get(product, 0))
-
-
-    num_blank_spaces = len(sorted_retained_products) - len(sorted_retained_users)
-    sorted_retained_users_extended = sorted_retained_users + [''] * num_blank_spaces
-
-    # Save the lists of retained users and products side by side in a text file
-    file_name = 'users_and_retained_products.txt'
-    with open(file_name, 'w') as f:
-        f.write("Retained Products\tRetained Users\n")
-        for product, user in zip(sorted_retained_products,sorted_retained_users_extended):
-            f.write(product + '\t' + '\t' +user + '\n')
-save_retained_users_and_products_list()           
-
-def Create_matrixs():
-    
-    matrix_w_NANs = df_final.pivot(index='user_id', columns='prod_id', values='rating')
-    avg_ratings = matrix_w_NANs.mean(axis=1)
-    final_ratings_matrix = matrix_w_NANs.sub(avg_ratings, axis=0)
-    matrix_filled = final_ratings_matrix.fillna(0)
-    return matrix_filled, matrix_w_NANs        
-
-matrix_filled, matrix_w_NANs = Create_matrixs()
-
-matrix_filled.to_csv('matrix_filled.csv')
-matrix_w_NANs.to_csv('matrix_w_NANs.csv')
-
+matrix_filled = pd.read_csv(matrix_filled_path)
+matrix_w_NANs = pd.read_csv(matrix_w_NANs_path)
 
 def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     
