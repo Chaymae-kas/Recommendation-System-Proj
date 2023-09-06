@@ -27,7 +27,7 @@ matrix_filled_path = os.path.join(extracted_dir1, 'matrix_filled.csv')
 matrix_w_NANs_path = os.path.join(extracted_dir2, 'matrix_w_NANs.csv')
 
 matrix_filled = pd.read_csv(matrix_filled_path)
-matrix_w_NAN = pd.read_csv(matrix_w_NANs_path)
+matrix_w_NANs = pd.read_csv(matrix_w_NANs_path)
                                   
 def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     
