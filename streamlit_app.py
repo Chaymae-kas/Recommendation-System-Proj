@@ -24,7 +24,7 @@ with zipfile.ZipFile(zip_path2, 'r') as zip_ref:
     
 # Check if the CSV files exist in the extraction directory
 matrix_filled_path = os.path.join(extracted_dir1, 'matrix_filled.csv')
-matrix_w_NANs_path = os.path.join(extracted_dir2, 'matrix_w_NAN
+matrix_w_NANs_path = os.path.join(extracted_dir2, 'matrix_w_NAN)
                                   
 def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     
