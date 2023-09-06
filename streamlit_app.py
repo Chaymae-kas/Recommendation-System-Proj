@@ -8,19 +8,52 @@ import base64
 import zipfile
 import os
 
+import os
+import zipfile
+import pandas as pd
+
+def unzip_csv_files(zip_path, extracted_dir):
+    try:
+        # Ensure the extraction directory exists
+        os.makedirs(extracted_dir, exist_ok=True)
+
+        # Unzip the file
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extracted_dir)
+
+        # Check if the CSV files exist in the extraction directory
+        matrix_filled_path = os.path.join(extracted_dir, 'matrix_filled.csv')
+        matrix_w_NANs_path = os.path.join(extracted_dir, 'matrix_w_NANs.csv')
+
+        if os.path.isfile(matrix_filled_path) and os.path.isfile(matrix_w_NANs_path):
+            # Read the CSV files
+            matrix_filled = pd.read_csv(matrix_filled_path)
+            matrix_w_NANs = pd.read_csv(matrix_w_NANs_path)
+
+            # Return the dataframes
+            return matrix_filled, matrix_w_NANs
+        else:
+            print("CSV files not found in the extraction directory.")
+            return None, None
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None, None
+
+# Specify the paths for the ZIP file and extraction directory
 zip_path = 'data.zip'
 extracted_dir = 'extracted_file/'
 
-# Unzip the file
-with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-    zip_ref.extractall(extracted_dir)
+# Call the function to unzip and read the CSV files
+matrix_filled, matrix_w_NANs = unzip_csv_files(zip_path, extracted_dir)
 
-# Read the CSV file from the extracted directory
-matrix_filled_path = os.path.join(extracted_dir, 'matrix_filled.csv')
-matrix_w_NANs_path = os.path.join(extracted_dir, 'matrix_w_NANs.csv')
-
-matrix_filled = pd.read_csv(matrix_filled_path)
-matrix_w_NANs = pd.read_csv(matrix_w_NANs_path)
+# Check if the dataframes were successfully loaded
+if matrix_filled is not None and matrix_w_NANs is not None:
+    # Perform further processing or analysis with the dataframes
+    print("CSV files successfully loaded.")
+    # ... Your code here ...
+else:
+    print("Unable to load CSV files.")
 
 def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     
