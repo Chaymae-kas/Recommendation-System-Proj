@@ -117,6 +117,22 @@ def add_bg_from_local(image_file):
          )
 add_bg_from_local('background.avif')
 
+theme_config = """
+[theme]
+primaryColor = "#141f5a"
+backgroundColor = "#66719a"
+secondaryBackgroundColor = "#c2cff3"
+textColor = "#ffffff"
+"""
+
+st.set_page_config(
+    page_title="Recommendation System",
+    page_icon=":star:",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    **st.config.toml_loader(theme_config)
+)
+
 with st.sidebar:
    
     selected = option_menu('Recommendation System For Online Products',
