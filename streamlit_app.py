@@ -116,7 +116,7 @@ def add_bg_from_local(image_file):
         """,
         unsafe_allow_html=True
          )
-add_bg_from_local('C:/Users/dell/OneDrive/Bureau/git/Recommendation-System-Proj/background.jpg')
+add_bg_from_local('background.jpg')
 
 
 
