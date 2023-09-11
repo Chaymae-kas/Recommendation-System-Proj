@@ -38,7 +38,7 @@ def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     target_user_x = matrix_filled.loc[target_user]
     
     other_users_y = matrix_w_NANs[target_product]
-    other_users_x = matrix_filled[other_users_y.notnull()]
+    oother_users_x = matrix_filled.loc[other_users_y.notnull()]
     
     other_users_y.dropna(inplace=True)  
     
