@@ -101,6 +101,25 @@ def top_n_products(n, min_interaction):
     
     return recommendations
 
+
+def add_bg_from_local(image_file):
+        with open(image_file, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read())
+        st.markdown(
+         f"""
+        <style>
+        .stApp {{
+        background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+        background-size: cover
+         }}
+        </style>
+        """,
+        unsafe_allow_html=True
+         )
+add_bg_from_local('C:/Users/dell/OneDrive/Bureau/git/Recommendation-System-Proj/background.jpg')
+
+
+
 with st.sidebar:
    
     selected = option_menu('Recommendation System For Online Products',
@@ -110,8 +129,6 @@ with st.sidebar:
                            'Collaborative Filtering Based Recommendation'],
                           icons=['star-half','list-stars','heart-half'],
                           default_index=0)
-    
-
 
 
 if (selected == 'Rating Prediction'):
