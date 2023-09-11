@@ -32,7 +32,7 @@ matrix_w_NANs = pd.read_csv(matrix_w_NANs_path)
 def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     
     matrix_filled.drop(target_product, axis=1, inplace=True)
-    target_user_x = matrix_filled.loc[[target_user]]
+    target_user_x = matrix_filled.loc[target_user]
     
     other_users_y = matrix_w_NANs[target_product]
     other_users_x = matrix_filled[other_users_y.notnull()]
