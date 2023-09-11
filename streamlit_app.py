@@ -46,7 +46,7 @@ def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     user_knn = KNeighborsRegressor(metric='cosine', n_neighbors=3) 
     user_knn.fit(other_users_x, other_users_y)
     
-    user_user_pred = user_knn.predict(target_user_x.reshape(1, -1))
+    user_user_pred = user_knn.predict(target_user_x.values.reshape(1, -1))
     
     return user_user_pred
 
