@@ -31,6 +31,8 @@ matrix_w_NANs = pd.read_csv(matrix_w_NANs_path)
 
 matrix_filled = matrix_filled.set_index('user_id')
 
+top_n_products_df =  pd.read_csv('top_n_products_df.csv')
+
                                   
 def predict_rating(target_product, target_user, matrix_w_NANs, matrix_filled):
     
@@ -92,21 +94,8 @@ def recommendations(user_index, num_of_products, interactions_matrix):
     return recommendations[:num_of_products]
 
 def top_n_products( n, min_interaction):
-    #Calculate the average rating for each product 
-    average_rating = df_final.groupby(['prod_id']).mean().rating
-    #Calculate the count of ratings for each product
-    count_rating = df_final.groupby(['prod_id']).count().rating
-
-    #Create a dataframe with calculated average and count of ratings
-    final_rating = pd.DataFrame(pd.concat([average_rating,count_rating], axis = 1))
-    final_rating.columns=["Average Rating", "Ratings Count"]
-
-    #Sort the dataframe by average of ratings
-    final_rating = final_rating.sort_values(by='Average Rating', ascending=True)
-
-    finaal_rating = final_rating.sort_values(by='Ratings Count', ascending=True)
     
-    recommendations = finaal_rating[finaal_rating['Ratings Count'] >= min_interaction]
+    recommendations = top_n_products_df[top_n_products_df['Ratings Count'] >= min_interaction]
     
     return recommendations.index[:n]
 
