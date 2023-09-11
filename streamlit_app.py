@@ -123,7 +123,7 @@ with st.sidebar:
                           
                           ['Rating Prediction',
                            'Rank Based Recommendation',
-                           'Collaborative Filtering based Recommendation'],
+                           'Collaborative Filtering Based Recommendation'],
                           icons=['star-half','list-stars','heart-half'],
                           default_index=0)
     
