@@ -101,33 +101,6 @@ def top_n_products(n, min_interaction):
     
     return recommendations
 
-def add_bg_from_local(image_file):
-        with open(image_file, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read())
-        st.markdown(
-         f"""
-        <style>
-        .stApp {{
-        background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
-        background-size: cover
-         }}
-        </style>
-        """,
-        unsafe_allow_html=True
-         )
-add_bg_from_local('background.avif')
-
-st.set_page_config(
-    page_title="Recommendation System",
-    page_icon=":star:",
-    layout="wide",
-    initial_sidebar_state="expanded",
-    primaryColor="#141f5a",
-    backgroundColor="#66719a",
-    secondaryBackgroundColor="#c2cff3",
-    textColor="#ffffff"
-)
-
 with st.sidebar:
    
     selected = option_menu('Recommendation System For Online Products',
