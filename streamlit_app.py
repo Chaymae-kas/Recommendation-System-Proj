@@ -93,11 +93,13 @@ def recommendations(user_index, num_of_products, interactions_matrix):
 
     return recommendations[:num_of_products]
 
-def top_n_products( n, min_interaction):
+def top_n_products(n, min_interaction):
+    recommendations_df = top_n_products_df[top_n_products_df['Ratings Count'] >= min_interaction]
     
-    recommendations = top_n_products_df[top_n_products_df['Ratings Count'] >= min_interaction]
+    # Return the 'prod_id' values as a list
+    recommendations = recommendations_df['prod_id'].head(n).tolist()
     
-    return recommendations.index[:n]
+    return recommendations
 
 def add_bg_from_local(image_file):
         with open(image_file, "rb") as image_file:
